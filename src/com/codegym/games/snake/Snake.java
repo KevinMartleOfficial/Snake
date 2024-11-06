@@ -53,7 +53,7 @@ public class Snake extends GameObject {
         }return collisie;
     }
 
-    public void move(Apple apple){
+    public void move(Apple apple, Bomb bomb){
         GameObject newSnakeHead = createNewHead();
         if(newSnakeHead.x >= WIDTH  || newSnakeHead.x < 0 || newSnakeHead.y < 0 || newSnakeHead.y >= HEIGHT){
             isAlive = false;
@@ -69,6 +69,11 @@ public class Snake extends GameObject {
             } else {
                 removeTail();
             }
+            if(bomb.x == newSnakeHead.x && bomb.y == newSnakeHead.y){
+                bomb.isAlive = false;
+                    isAlive = false;
+            }
+
         }
     }
 
@@ -105,4 +110,6 @@ public class Snake extends GameObject {
     public void removeTail(){
         snakeParts.remove((snakeParts.size())-1);
     }
+
+
 }

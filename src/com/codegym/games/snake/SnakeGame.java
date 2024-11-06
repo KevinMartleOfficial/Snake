@@ -8,6 +8,7 @@ public class SnakeGame extends Game{
     public final static int HEIGHT = 15;
     private Snake snake;
     private Apple apple;
+    private Bomb bomb;
     private int turnDelay;
     private boolean isGameStopped;
     private static final int GOAL = 28;
@@ -22,11 +23,14 @@ public class SnakeGame extends Game{
 
     @Override
     public void onTurn(int a){
-        snake.move(apple);
+        snake.move(apple, bomb);
         if(!apple.isAlive){
             setTurnTimer(turnDelay -= 10);
             setScore(score += 5);
             createNewApple();
+        }
+        if(!bomb.isAlive){
+            createNewBomb();
         }
         if(!snake.isAlive){
             gameOver();
@@ -39,26 +43,24 @@ public class SnakeGame extends Game{
 
     @Override
     public void onKeyPress(Key key){
-
-        switch (key){
-            case LEFT :
+            switch (key) {
+                case LEFT:
                     snake.setDirection(Direction.LEFT);
-                break;
-            case RIGHT:
+                    break;
+                case RIGHT:
                     snake.setDirection(Direction.RIGHT);
-                break;
-            case UP:
+                    break;
+                case UP:
                     snake.setDirection(Direction.UP);
-                break;
-            case DOWN:
-                snake.setDirection(Direction.DOWN);
-                break;
-            case SPACE:
-                if(isGameStopped){
+                    break;
+                case DOWN:
+                    snake.setDirection(Direction.DOWN);
+                    break;
+                case SPACE:
                     createGame();
-                }
-                break;
-        }
+                    break;
+
+            }
     }
 
     private void createGame(){
@@ -68,9 +70,21 @@ public class SnakeGame extends Game{
         turnDelay = 300;
         setTurnTimer(turnDelay);
         createNewApple();
+        createNewBomb();
         isGameStopped = false;
         drawScene();
+
     };
+
+    private void createNewBomb(){
+
+        bomb = new Bomb(getRandomNumber(WIDTH), getRandomNumber(HEIGHT));
+        while(snake.checkCollision(bomb) && (bomb.x == apple.x && bomb.y == apple.y)){
+            bomb = new Bomb(getRandomNumber(WIDTH), getRandomNumber(HEIGHT));
+        }
+    }
+
+
 
 
     private void createNewApple(){
@@ -84,51 +98,40 @@ public class SnakeGame extends Game{
     private void gameOver(){
         stopTurnTimer();
         isGameStopped = true;
-        showMessageDialog(Color.AQUA, "Game over", Color.BEIGE, 75);
+        showMessageDialog(Color.TEAL, "Game over! Je score was " +score, Color.CORNSILK, 50);
     }
 
     private void win(){
         stopTurnTimer();
         isGameStopped = true;
-        showMessageDialog(Color.CORAL, "You win!! Good job", Color.DARKBLUE, 60);
+        showMessageDialog(Color.DARKRED, "You win!! Good job!", Color.SNOW, 60);
     }
 
 
-
-    private void drawScene(){
-        for (int x = 0; x < WIDTH; x++ ){
-            for (int y = 0; y < HEIGHT; y++){
-                setCellValueEx(x, y, Color.ALICEBLUE, "");
+        private void drawScene(){
+        for (int x = 0; x < WIDTH; x++){
+            if(x % 2 == 0) {
+                for (int y = 0; y < HEIGHT; y +=2) {
+                    setCellValueEx(x, y, Color.WHEAT, "");
+                }
+                for(int y = 1 ; y < HEIGHT; y += 2){
+                    setCellValueEx(x, y, Color.WHITE, "");
+                }
             }
-        }
+                else{
+                    for(int y = 0; y < HEIGHT; y += 2){
+                    setCellValueEx(x, y, Color.WHITE, "");
+                    }
+                    for (int y = 1; y < HEIGHT; y += 2){
+                        setCellValueEx(x, y, Color.WHEAT, "");
+                    }
+                }
+
+            }
         snake.draw(this);
         apple.draw(this);
-    }
-
-
-
-    //    private void drawScene(){
-//        for (int x = 0; x < WIDTH; x++){
-//            if(x % 2 == 0) {
-//                for (int y = 0; y < HEIGHT; y +=2) {
-//                    setCellColor(x, y, Color.WHEAT);
-//                }
-//                for(int y = 1 ; y < HEIGHT; y += 2){
-//                    setCellColor(x, y, Color.WHITE);
-//                }
-//            }
-//                else{
-//                    for(int y = 0; y < HEIGHT; y += 2){
-//                    setCellColor(x, y, Color.WHITE);
-//                    }
-//                    for (int y = 1; y < HEIGHT; y += 2){
-//                        setCellColor(x, y, Color.WHEAT);
-//                    }
-//                }
-//
-//            }
-//        snake.draw(this);
-//        }
+        bomb.draw(this);
+        }
 
 
     }
