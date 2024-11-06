@@ -14,7 +14,7 @@ public class Bomb extends GameObject{
     }
 
     public void draw(Game game){
-        game.setCellValueEx(x, y, Color.NONE, BOMB, Color.BLACK, 75);
+        game.setCellValueEx(x, y, Color.NONE, BOMB, Color.DEEPSKYBLUE, 75);
 
     }
 

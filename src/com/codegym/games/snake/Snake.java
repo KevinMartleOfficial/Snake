@@ -59,6 +59,7 @@ public class Snake extends GameObject {
             isAlive = false;
             return;
         }
+
         if(checkCollision(newSnakeHead)){
             isAlive = false;
         }
@@ -70,20 +71,14 @@ public class Snake extends GameObject {
                 removeTail();
             }
             if(bomb.x == newSnakeHead.x && bomb.y == newSnakeHead.y){
-                bomb.isAlive = false;
-                    isAlive = false;
+                isAlive = false;
             }
-
         }
     }
 
     public int getLength(){
         return snakeParts.size();
     }
-
-
-
-
 
     public GameObject createNewHead(){
         GameObject snakeHead = new GameObject(snakeParts.get(0).x, snakeParts.get(0).y);

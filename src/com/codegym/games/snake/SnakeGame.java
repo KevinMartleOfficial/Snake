@@ -1,6 +1,9 @@
 package com.codegym.games.snake;
 
 import com.codegym.engine.cell.*;
+import java.util.TimerTask;
+import java.util.Timer;
+
 
 
 public class SnakeGame extends Game{
@@ -13,13 +16,18 @@ public class SnakeGame extends Game{
     private boolean isGameStopped;
     private static final int GOAL = 28;
     private int score;
+    private Timer timer = new Timer();
     
+
+
     
     @Override
     public void initialize(){
         setScreenSize(WIDTH, HEIGHT);
         createGame();
     }
+
+
 
     @Override
     public void onTurn(int a){
@@ -28,9 +36,6 @@ public class SnakeGame extends Game{
             setTurnTimer(turnDelay -= 10);
             setScore(score += 5);
             createNewApple();
-        }
-        if(!bomb.isAlive){
-            createNewBomb();
         }
         if(!snake.isAlive){
             gameOver();
@@ -59,40 +64,47 @@ public class SnakeGame extends Game{
                 case SPACE:
                     createGame();
                     break;
-
             }
     }
 
     private void createGame(){
         score = 0;
-        setScore(score);
-        snake = new Snake(WIDTH/2, HEIGHT/2);
         turnDelay = 300;
+        setScore(score);
         setTurnTimer(turnDelay);
+        snake = new Snake(WIDTH/2, HEIGHT/2);
         createNewApple();
-        createNewBomb();
+        placeBombsOnTimer();
         isGameStopped = false;
         drawScene();
 
     };
 
-    private void createNewBomb(){
-
-        bomb = new Bomb(getRandomNumber(WIDTH), getRandomNumber(HEIGHT));
-        while(snake.checkCollision(bomb) && (bomb.x == apple.x && bomb.y == apple.y)){
-            bomb = new Bomb(getRandomNumber(WIDTH), getRandomNumber(HEIGHT));
-        }
+    public void placeBombsOnTimer(){
+        TimerTask repeatBombs = new TimerTask() {
+            @Override
+            public void run() {
+                createNewBomb();
+            }
+        };
+        timer.cancel();
+        timer = new Timer();
+        timer.scheduleAtFixedRate(repeatBombs, 0, 4000);
     }
 
 
-
+    private void createNewBomb() {
+        bomb = new Bomb(getRandomNumber(WIDTH), getRandomNumber(HEIGHT));
+        while(snake.checkCollision(bomb) || (bomb.x == apple.x && bomb.y == apple.y)){
+            bomb = new Bomb(getRandomNumber(WIDTH), getRandomNumber(HEIGHT));
+        }
+    }
 
     private void createNewApple(){
         apple = new Apple(getRandomNumber(WIDTH), getRandomNumber(HEIGHT));
         while(snake.checkCollision(apple)){
             apple = new Apple(getRandomNumber(WIDTH), getRandomNumber(HEIGHT));
         };
-
     }
 
     private void gameOver(){
@@ -126,12 +138,9 @@ public class SnakeGame extends Game{
                         setCellValueEx(x, y, Color.WHEAT, "");
                     }
                 }
-
             }
         snake.draw(this);
         apple.draw(this);
         bomb.draw(this);
         }
-
-
     }
