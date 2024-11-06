@@ -17,7 +17,5 @@ public class Apple extends GameObject{
         game.setCellValueEx(x, y, Color.NONE, APPLE_SIGN, Color.RED, 75);
     }
 
-    public boolean isAlive(){
-        return true;
-    }
+
 }

@@ -12,6 +12,7 @@ public class SnakeGame extends Game{
     private Snake snake;
     private Apple apple;
     private Bomb bomb;
+    private Bird bird;
     private int turnDelay;
     private boolean isGameStopped;
     private static final int GOAL = 28;
@@ -74,6 +75,7 @@ public class SnakeGame extends Game{
         setTurnTimer(turnDelay);
         snake = new Snake(WIDTH/2, HEIGHT/2);
         createNewApple();
+        createNewBird();
         placeBombsOnTimer();
         isGameStopped = false;
         drawScene();
@@ -105,6 +107,13 @@ public class SnakeGame extends Game{
         while(snake.checkCollision(apple)){
             apple = new Apple(getRandomNumber(WIDTH), getRandomNumber(HEIGHT));
         };
+    }
+
+    private void createNewBird(){
+        bird = new Bird(getRandomNumber(WIDTH), getRandomNumber(HEIGHT));
+        while(snake.checkCollision(bird)){
+            bird = new Bird(getRandomNumber(WIDTH), getRandomNumber(HEIGHT));
+        }
     }
 
     private void gameOver(){
@@ -142,5 +151,6 @@ public class SnakeGame extends Game{
         snake.draw(this);
         apple.draw(this);
         bomb.draw(this);
+        bird.draw(this);
         }
     }
