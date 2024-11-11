@@ -32,7 +32,7 @@ public class SnakeGame extends Game{
 
     @Override
     public void onTurn(int a){
-        snake.move(apple, bomb);
+        snake.move(apple, bomb, bird);
         if(!apple.isAlive){
             setTurnTimer(turnDelay -= 10);
             setScore(score += 5);

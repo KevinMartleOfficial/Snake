@@ -23,13 +23,15 @@ public class Snake extends GameObject {
     }
 
     public void setDirection(Direction directionInput) {
-        boolean xDirection = snakeParts.get(0).x == snakeParts.get(1).x;
-        boolean yDirection = snakeParts.get(0).y == snakeParts.get(1).y;
-        if( ((directionInput == Direction.RIGHT || xDirection ) && direction == Direction.LEFT )
-        ||  ((directionInput == Direction.LEFT || xDirection) && direction == Direction.RIGHT )
-        ||  ((directionInput == Direction.UP || yDirection)  && direction == Direction.DOWN )
-        ||  ((directionInput == Direction.DOWN || yDirection) && direction == Direction.UP  )){
-        }
+
+            boolean xDirection = snakeParts.get(0).x == snakeParts.get(1).x;
+            boolean yDirection = snakeParts.get(0).y == snakeParts.get(1).y;
+            if (((directionInput == Direction.RIGHT || xDirection) && direction == Direction.LEFT)
+                    || ((directionInput == Direction.LEFT || xDirection) && direction == Direction.RIGHT)
+                    || ((directionInput == Direction.UP || yDirection) && direction == Direction.DOWN)
+                    || ((directionInput == Direction.DOWN || yDirection) && direction == Direction.UP)) {
+            }
+
         else{
         direction = directionInput;
         }
@@ -53,7 +55,7 @@ public class Snake extends GameObject {
         }return collisie;
     }
 
-    public void move(Apple apple, Bomb bomb){
+    public void move(Apple apple, Bomb bomb, Bird bird){
         GameObject newSnakeHead = createNewHead();
         if(newSnakeHead.x >= WIDTH  || newSnakeHead.x < 0 || newSnakeHead.y < 0 || newSnakeHead.y >= HEIGHT){
             isAlive = false;
@@ -72,6 +74,13 @@ public class Snake extends GameObject {
             }
             if(bomb.x == newSnakeHead.x && bomb.y == newSnakeHead.y){
                 isAlive = false;
+            }
+            if(bird.x == newSnakeHead.x && bird.y == newSnakeHead.y){
+                removeTail();
+                removeTail();
+                if(snakeParts.size() <= 3){
+                    isAlive = false;
+                }
             }
         }
     }
