@@ -44,7 +44,7 @@ public class Snake extends GameObject {
                 game.setCellValueEx(snakeParts.get(i).x, snakeParts.get(i).y, Color.NONE, BODY_SIGN, isAlive ? Color.BLACK : Color.RED, 75);
             }
     }
-
+    //Controleert als er botsingen zijn met het nieuw gecreëerde snakeObject vs de bestaande snake
     public boolean checkCollision(GameObject gameObject){
         boolean collisie = false;
         for (GameObject part : snakeParts){
@@ -72,14 +72,16 @@ public class Snake extends GameObject {
             } else {
                 removeTail();
             }
-            if(bomb.x == newSnakeHead.x && bomb.y == newSnakeHead.y){
+            if (bomb.x == newSnakeHead.x && bomb.y == newSnakeHead.y){
                 isAlive = false;
             }
-            if(bird.x == newSnakeHead.x && bird.y == newSnakeHead.y){
+            if (bird.x == newSnakeHead.x && bird.y == newSnakeHead.y){
+                bird.isAlive = false;
                 removeTail();
                 removeTail();
-                if(snakeParts.size() <= 3){
+                if(snakeParts.size() < 3){
                     isAlive = false;
+
                 }
             }
         }
@@ -107,8 +109,6 @@ public class Snake extends GameObject {
 
         }
         return snakeHead;
-
-
     }
 
     public void removeTail(){

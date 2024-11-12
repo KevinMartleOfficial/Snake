@@ -2,7 +2,7 @@ package com.codegym.games.snake;
 
 import com.codegym.engine.cell.*;
 
-public class Apple extends GameObject{
+public class Apple extends GameObject implements CheckCollisionItems{
     private static final String APPLE_SIGN = "\uD83C\uDF4E";
     public boolean isAlive = true;
 
@@ -18,4 +18,8 @@ public class Apple extends GameObject{
     }
 
 
+    @Override
+    public boolean checkCollisionItems(GameObject object) {
+        return (x == object.x && y == object.y);
+    }
 }
